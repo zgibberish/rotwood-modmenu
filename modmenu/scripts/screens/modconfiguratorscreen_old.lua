@@ -19,96 +19,126 @@ local ModEntryImageButton = require "widgets/modentry_imagebutton"
 
 local MOD_ENTRY_BUTTON_WIDTH = 200
 
--- a simplified version of OptionsScreen
+------------------------------------------------------------------------------------------
+--- Modified optionsscreen designed to only show 1 page (the config page of the selected mod)
+--- most functionalities have been removed
+----
 local ModConfiguratorScreen = Class(Screen, function(self, modname)
-    Screen._ctor(self, "ModConfiguratorScreen")
-    self.modname = modname
-    local mod_is_client = false
+	Screen._ctor(self, "ModConfiguratorScreen")
+
+	self.modname = modname
+
+	local mod_is_client = false
     if KnownModIndex.savedata.known_mods[modname] and KnownModIndex.savedata.known_mods[modname] and KnownModIndex.savedata.known_mods[modname].modinfo and KnownModIndex.savedata.known_mods[modname].modinfo.client_only_mod and KnownModIndex.savedata.known_mods[modname].modinfo.client_only_mod == true then
         mod_is_client = true
     end
     self.configuration_options = KnownModIndex:LoadModConfigurationOptions(modname, mod_is_client)
 	self.configuration_options_backup = deepcopy(self.configuration_options)
 
-    -- Setup sizings
-    self.rowWidth = 2520
-    self.rowRightColumnWidth = 880
-    self.rowSpacing = 120
+	--sound
+	self:SetAudioCategory(Screen.AudioCategory.s.Fullscreen)
+	self:SetAudioExitOverride(nil)
 
-    -- Add background
-	self.bg = self:AddChild(templates.BackgroundImage("images/bg_optionsscreen_bg/optionsscreen_bg.tex"))
+	-- Setup sizings
+	self.rowWidth = 2520
+	self.rowRightColumnWidth = 880
+	self.rowSpacing = 120
+
+	-- Add background
+	self.bg = self:AddChild(templates.BackgroundImage("images/ui_ftf_options/optionsscreen_bg.tex"))
+
 	-- And panel background
 	self.panel_bg = self:AddChild(Panel("images/bg_bottom_panel/bottom_panel.tex"))
 		:SetName("Panel background")
 		:SetNineSliceCoords(200, 350, 300, 1950)
 		:SetSize(2400, 2100)
 
-    -- Add nav header
+	-- Add nav header
+	self.navbarWidth = RES_X - 160
+	self.navbarHeight = 180
 	local icon_size = FONTSIZE.OPTIONS_SCREEN_TAB * 1.1
-    self.nav_tabs = self:AddChild(TabGroup())
-        :SetTheme_DarkOnLight(nil, UICOLORS.BACKGROUND_LIGHT, nil, nil)
-        :SetTabSpacing(100)
-        :SetFontSize(FONTSIZE.OPTIONS_SCREEN_TAB)
-    self.tabs = {}
-    self.tabs.main = self.nav_tabs:AddIconTextTab("images/ui_ftf_dialog/ic_options.tex", KnownModIndex:GetModFancyName(modname))
-    self.tabs.main:SetGainFocusSound(fmodtable.Event.hover)
 
-    self.nav_tabs
-		:SetTabSize(nil, icon_size)
-		:SetNavFocusable(false) -- rely on CONTROL_MAP
-		-- :AddCycleIcons(60, 50)
-		-- no need for cycle icons if we only have 1 tab
+	self.nav_tabs = self:AddChild(TabGroup())
+		:SetTheme_DarkOnLight(nil, UICOLORS.BACKGROUND_LIGHT, nil, nil)
+		:SetTabSpacing(100)
+		:SetFontSize(FONTSIZE.OPTIONS_SCREEN_TAB)
 
-    -- Add back button
+	-- Add navbar options
+	self.tabs = {}
+	local mod_fancyname = KnownModIndex:GetModFancyName(modname)
+	self.tabs.main = self.nav_tabs:AddIconTextTab("images/ui_ftf_dialog/ic_options.tex", mod_fancyname)
+	self.tabs.main:SetGainFocusSound(fmodtable.Event.hover)
+
+	local tab_count = lume.count(self.tabs)
+
+	-- Add back button
 	self.backButton = self:AddChild(ImageButton("images/ui_ftf/HeaderClose.tex"))
-        :SetName("Back button")
-        :SetSize(BUTTON_SQUARE_SIZE, BUTTON_SQUARE_SIZE)
-        :SetFocusScale(1.2)
-        :SetNormalScale(1.1)
-        :SetScale(1.1)
-        :SetNavFocusable(false)
-        :SetOnClick(function() self:OnClickClose() end)
+		:SetName("Back button")
+		:SetSize(BUTTON_SQUARE_SIZE, BUTTON_SQUARE_SIZE)
+		:SetFocusScale(1.2)
+		:SetNormalScale(1.1)
+		:SetScale(1.1)
+		:SetNavFocusable(false)
+		:SetOnClick(function() self:OnClickClose() end)
 
-    -- Add save button
+	-- Add save button
 	self.saveButtonBg = self:AddChild(Image("images/ui_ftf/small_panel.tex"))
-        :SetName("Panel")
-        :SetSize(500, 190)
-        :SetMultColor(UICOLORS.LIGHT_BACKGROUNDS_DARK)
-    self.saveButton = self:AddChild(templates.AcceptButton(STRINGS.UI.OPTIONSSCREEN.SAVE_BUTTON))
-        :SetNormalScale(0.8)
-        :SetFocusScale(0.85)
-        :SetScale(0.8)
-        :SetPrimary()
-        :SetOnClick(function() self:OnClickSave() end)
-        :Hide()
-        :SetControlUpSound(fmodtable.Event.ui_input_up_confirm_save)
+		:SetName("Panel")
+		:SetSize(500, 190)
+		:SetMultColor(UICOLORS.LIGHT_BACKGROUNDS_DARK)
+	self.saveButton = self:AddChild(templates.AcceptButton(STRINGS.UI.OPTIONSSCREEN.SAVE_BUTTON))
+		:SetNormalScale(0.8)
+		:SetFocusScale(0.85)
+		:SetScale(0.8)
+		:SetPrimary()
+		:SetOnClick(function() self:OnClickSave() end)
+		:Hide()
+		:SetControlUpSound(fmodtable.Event.ui_input_up_confirm_save)
 
-    -- Add a confirmation label to be displayed when the options are saved
+	-- Add a confirmation label to be displayed when the options are saved
 	self.saveConfirmationLabel = self:AddChild(Text(FONTFACE.DEFAULT, FONTSIZE.OPTIONS_SCREEN_TAB))
-        :SetGlyphColor(UICOLORS.LIGHT_TEXT)
-        :SetAutoSize(600)
-        :SetText(STRINGS.UI.OPTIONSSCREEN.SAVED_OPTIONS_LABEL)
-        :SetMultColorAlpha(0)
-    
-    -- Add scrolling panel below the navigation
-	self.scroll = self:AddChild(ScrollPanel())
-        :SetSize(RES_X - 400, RES_Y)
-        :SetVirtualMargin(140)
-        :SetVirtualBottomMargin(1000)
-        :SetBarInset(200)
-        :LayoutBounds("center", "bottom", self.bg)
-        :SetFocusableChildrenFn(function()
-            return self.currentPage:GetChildren()
-        end)
-    self.scrollContents = self.scroll:AddScrollChild(Widget())
-    self.scrollBar = self.scroll:GetScrollBar()
+		:SetGlyphColor(UICOLORS.LIGHT_TEXT)
+		:SetAutoSize(600)
+		:SetText(STRINGS.UI.OPTIONSSCREEN.SAVED_OPTIONS_LABEL)
+		:SetMultColorAlpha(0)
 
-    -- Add tab-specific views
+	-- Add scrolling panel below the navbar
+	self.scroll = self:AddChild(ScrollPanel())
+		:SetSize(RES_X - 400, RES_Y)
+		:SetVirtualMargin(140)
+		:SetVirtualBottomMargin(1000)
+		:SetBarInset(200)
+		:LayoutBounds("center", "bottom", self.bg)
+		:SetFocusableChildrenFn(function()
+			return self.currentPage:GetChildren()
+		end)
+	self.scrollContents = self.scroll:AddScrollChild(Widget())
+	self.scrollBar = self.scroll:GetScrollBar()
+
+	-- Add tab-specific views
 	self.pages = {}
-	self.pages.main = self.scrollContents:AddChild(Widget("Page Main"))
-    self:_BuildMainPage()
+	self.pages.main = self.scrollContents:AddChild(Widget("Page Main (mod configs)"))
+	-- Fill up all the pages with content!
+	self:_BuildMainPage()
+	self.tabs.main.page = self.pages.main
+
+	self.scroll:RefreshView()
+
+	dbassert(not self:IsDirty(), "Shouldn't be dirty before making changes. Are we clamping? (Should migrate save data in gamesettings.)")
+
+	-- Add a gradient fading out the options at the bottom of the screen
+	self.bottomGradientFade = self:AddChild(Image("images/ui_ftf_options/bottom_gradient.tex"))
+		:SetSize(RES_X, 600)
+		:LayoutBounds("center", "bottom", self.bg)
+	-- Move the gradient into the scroll panel, so I can place the scroll bar on top
+	self.bottomGradientFade:Reparent(self.scroll)
+	self.scroll.scroll_bar:SendToFront()
+
+	-- Position navbar in front of the scroll panel
+	self.navbar:SendToFront()
 
 	self.default_focus = self.pages.main.default_focus or self.backButton
+	self.default_focus:SetFocus()
 end)
 
 ModConfiguratorScreen.CONTROL_MAP =
@@ -137,20 +167,9 @@ ModConfiguratorScreen.CONTROL_MAP =
 	},
 }
 
-function ModConfiguratorScreen:OnBecomeActive()
-	ModConfiguratorScreen._base.OnBecomeActive(self)
-	-- Hide the topfade, it'll obscure the pause menu if paused during fade. Fade-out will re-enable it
-	TheFrontEnd:HideTopFade()
-	self:Layout()
-	if not self.animatedIn then
-		-- Select first tab
-		self.nav_tabs:SelectTab(1)
-		self:_AnimateIn()
-		self.animatedIn = true
-	end
-end
 function ModConfiguratorScreen:OnOpen()
 	ModConfiguratorScreen._base.OnOpen(self)
+
 	self:EnableFocusBracketsForGamepad()
 	self.nav_tabs:SelectTab(1)
 end
@@ -188,11 +207,9 @@ function ModConfiguratorScreen:Layout()
 		:Offset(0, -10)
 		:SetScale(1, -1)
 		:SendToFront()
-		:Hide() -- hidden by default
 	self.saveButton:LayoutBounds("center", "bottom", self.bg)
 		:Offset(0, 40)
 		:SendToFront()
-		:Hide() -- hidden by default
 
 	-- Display focus brackets on top of the save button
 	self:SendFocusBracketsToFront()
@@ -290,38 +307,29 @@ function ModConfiguratorScreen:_BuildMainPage()
 	return self
 end
 
-function ModConfiguratorScreen:OnClickSave()
+--- Called when an option was edited by the player
+function ModConfiguratorScreen:MakeDirty()
+	-- Check if something actually changed compared to the stored settings
 	if self:IsDirty() then
-		self:_SaveChanges()
-		-- Animate confirmation label and button
-		self.saveConfirmationLabel:RunUpdater(Updater.Series({
-			-- Fade button out
-			Updater.Ease(function(v)
-				self.saveButtonBg:SetMultColorAlpha(v)
-				self.saveButton:SetMultColorAlpha(v)
-			end, 1, 0, 0.2, easing.inOutQuad),
-			Updater.Do(function()
-				self.saveButtonBg:Hide()
-					:SetMultColorAlpha(1)
-				self.saveButton:Hide()
-					:SetMultColorAlpha(1)
-			end),
-
-			-- Animate in label
-			Updater.Parallel({
-				Updater.Ease(function(v) self.saveConfirmationLabel:SetMultColorAlpha(v) end, 0, 1, 0.3, easing.inOutQuad),
-				Updater.Ease(function(v) self.saveConfirmationLabel:SetPosition(self.labelX, v) end, self.labelY - 10, self.labelY, 0.8, easing.outQuad),
-			}),
-
-			Updater.Wait(0.8),
-
-			-- Animate label out
-			Updater.Parallel({
-				Updater.Ease(function(v) self.saveConfirmationLabel:SetMultColorAlpha(v) end, 1, 0, 0.8, easing.inOutQuad),
-				Updater.Ease(function(v) self.saveConfirmationLabel:SetPosition(self.labelX, v) end, self.labelY, self.labelY + 10, 0.8, easing.inQuad),
-			}),
-		}))
+		-- Show the save button
+		self.saveButton:Show()
+	else
+		-- Hide the save button
+		self.saveButton:Hide()
 	end
+end
+
+function ModConfiguratorScreen:IsDirty()
+	local matches_saved = deepcompare(self.configuration_options_backup, self.configuration_options)
+	return not matches_saved
+end
+
+function ModConfiguratorScreen:_SaveChanges()
+	-- placeholder: save mod configs and update self.configuration_options to match the saved data
+	KnownModIndex:SaveConfigurationOptions(function() end, self.modname, self.configuration_options, self.mod_is_client)
+	self.configuration_options_backup = deepcopy(self.configuration_options)
+	self:MakeDirty() -- update dirty status
+	return false
 end
 
 function ModConfiguratorScreen:OnClickClose()
@@ -341,8 +349,8 @@ function ModConfiguratorScreen:OnClickClose()
 			:SetYesButtonText(confirm_yes)
 			:SetNoButtonText(confirm_no)
 			:SetArrowUp()
-			:SetArrowXOffset(0) -- aligned with the backButton
-			:SetAnchorOffset(-200, 0)
+			:SetArrowXOffset(20) -- extra right shift looks more centred
+			:SetAnchorOffset(305, 0)
 	end
 
 	if self:IsDirty() then
@@ -373,31 +381,55 @@ function ModConfiguratorScreen:OnClickClose()
 	end
 end
 
---- Called when an option was edited by the player
-function ModConfiguratorScreen:MakeDirty()
-	-- Check if something actually changed compared to the stored settings
+function ModConfiguratorScreen:OnClickSave()
 	if self:IsDirty() then
-		-- Show the save button
-		self.saveButtonBg:Show()
-		self.saveButton:Show()
-	else
-		-- Hide the save button
-		self.saveButtonBg:Hide()
-		self.saveButton:Hide()
+		self:_SaveChanges()
+		-- Animate confirmation label and button
+		self.saveConfirmationLabel:RunUpdater(Updater.Series({
+
+			-- Fade button out
+			Updater.Ease(function(v) self.saveButton:SetMultColorAlpha(v) end, 1, 0, 0.2, easing.inOutQuad),
+			Updater.Do(function()
+				self.saveButton:Hide()
+					:SetMultColorAlpha(1)
+			end),
+
+			-- Animate in label
+			Updater.Parallel({
+				Updater.Ease(function(v) self.saveConfirmationLabel:SetMultColorAlpha(v) end, 0, 1, 0.3, easing.inOutQuad),
+				Updater.Ease(function(v) self.saveConfirmationLabel:SetPosition(self.labelX, v) end, self.labelY - 10, self.labelY, 0.8, easing.outQuad),
+			}),
+
+			Updater.Wait(0.8),
+
+			-- Animate label out
+			Updater.Parallel({
+				Updater.Ease(function(v) self.saveConfirmationLabel:SetMultColorAlpha(v) end, 1, 0, 0.8, easing.inOutQuad),
+				Updater.Ease(function(v) self.saveConfirmationLabel:SetPosition(self.labelX, v) end, self.labelY, self.labelY + 10, 0.8, easing.inQuad),
+			}),
+
+		}))
 	end
 end
 
-function ModConfiguratorScreen:IsDirty()
-	local matches_saved = deepcompare(self.configuration_options_backup, self.configuration_options)
-	return not matches_saved
+function ModConfiguratorScreen:Close()
+	self:_AnimateOut()
 end
 
-function ModConfiguratorScreen:_SaveChanges()
-	-- placeholder: save mod configs and update self.configuration_options to match the saved data
-	KnownModIndex:SaveConfigurationOptions(function() end, self.modname, self.configuration_options, self.mod_is_client)
-	self.configuration_options_backup = deepcopy(self.configuration_options)
-	self:MakeDirty() -- update dirty status
-	return false
+function ModConfiguratorScreen:OnBecomeActive()
+	ModConfiguratorScreen._base.OnBecomeActive(self)
+	-- Hide the topfade, it'll obscure the pause menu if paused during fade. Fade-out will re-enable it
+	TheFrontEnd:HideTopFade()
+
+	self:Layout()
+
+	if not self.animatedIn then
+		-- Select first tab
+		self.tabs.main:Click()
+
+		self:_AnimateIn()
+		self.animatedIn = true
+	end
 end
 
 function ModConfiguratorScreen:_AnimateIn()
@@ -406,10 +438,6 @@ end
 
 function ModConfiguratorScreen:_AnimateOut()
 	self:_AnimateOutToDirection(Vector2.unit_y)
-end
-
-function ModConfiguratorScreen:Close()
-	self:_AnimateOut()
 end
 
 return ModConfiguratorScreen

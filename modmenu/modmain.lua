@@ -11,7 +11,7 @@ local OptionsScreenToggleRow = require "widgets/optionsscreentogglerow"
 local OptionsScreenSpinnerRow = require "widgets/optionsscreenspinnerrow"
 local ModEntryImageButton = require "widgets/modentry_imagebutton"
 local ModEntryImageButtonToggle = require "widgets/modentry_imagebutton_toggle"
--- local ModConfiguratorScreen = require "screens/modconfiguratorscreen"
+local ModConfiguratorScreen = require "screens/modconfiguratorscreen"
 local ModSortingComparators = require "modsortingcomparators"
 
 local MOD_ENTRY_BUTTON_WIDTH = 200
@@ -90,8 +90,8 @@ local function OptionsScreen_AddModsTab(self)
                     entry.sidebuttons_container:AddChild(ModEntryImageButton("images/ui_ftf_dialog/ic_options.tex", MOD_ENTRY_BUTTON_WIDTH, (entry.entry_main.height/2 - 10)))
                         :SetImageOffset(4, 4)
                         :SetOnClickFn(function()
-                            -- local configurator_screen = ModConfiguratorScreen(modname)
-                            -- GLOBAL.TheFrontEnd:PushScreen(configurator_screen)
+                            local configurator_screen = ModConfiguratorScreen(modname)
+                            GLOBAL.TheFrontEnd:PushScreen(configurator_screen)
                         end)
 
                     entry.sidebuttons_container:LayoutChildrenInColumn(10)
