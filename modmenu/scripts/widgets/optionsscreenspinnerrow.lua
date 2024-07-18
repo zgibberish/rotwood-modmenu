@@ -2,13 +2,13 @@ local ImageButton = require --[[  ]]"widgets.imagebutton"
 local Text = require "widgets.text"
 local easing = require "util.easing"
 
-modimport("widgets/optionsscreenbaserow")
-modimport("widgets/optionsrowpagination")
+local OptionsScreenBaseRow = require "widgets/optionsscreenbaserow"
+local OptionsRowPagination = require "widgets/paginationdots"
 
 ------------------------------------------------------------------------------------------
 --- An option row that allows you to loop through discrete values
 ----
-OptionsScreenSpinnerRow = Class(OptionsScreenBaseRow, function(self, width, rightColumnWidth)
+local OptionsScreenSpinnerRow = Class(OptionsScreenBaseRow, function(self, width, rightColumnWidth)
 	OptionsScreenBaseRow._ctor(self, width, rightColumnWidth)
 	self:SetName("OptionsScreenSpinnerRow")
 
@@ -22,7 +22,7 @@ OptionsScreenSpinnerRow = Class(OptionsScreenBaseRow, function(self, width, righ
 	self.arrowSelectedColor = self.titleSelectedColor
 	self.arrowFocusColor = self.subtitleSelectedColor
 	self.arrowUnselectedColor = self.titleUnselectedColor
-	self.paginationUnselectedColor = GLOBAL.HexToRGB(0xB6965500)
+	self.paginationUnselectedColor = HexToRGB(0xB6965500)
 
 
 	-- Build right column contents
@@ -30,7 +30,7 @@ OptionsScreenSpinnerRow = Class(OptionsScreenBaseRow, function(self, width, righ
 		:SetSize(self.arrowSize, self.arrowSize)
 		:SetOnClick(function() self:OnArrowLeft() end)
 		:SetScaleOnFocus(false)
-	self.valueText = self.rightContainer:AddChild(Text(GLOBAL.FONTFACE.DEFAULT, GLOBAL.FONTSIZE.OPTIONS_ROW_TITLE, "", GLOBAL.UICOLORS.WHITE))
+	self.valueText = self.rightContainer:AddChild(Text(FONTFACE.DEFAULT, FONTSIZE.OPTIONS_ROW_TITLE, "", UICOLORS.WHITE))
 		:SetAutoSize(self.valueTextWidth)
 	self.valueRightArrow = self.rightContainer:AddChild(ImageButton("images/ui_ftf_options/pagination_right.tex"))
 		:SetSize(self.arrowSize, self.arrowSize)
@@ -50,7 +50,7 @@ end)
 
 OptionsScreenSpinnerRow.CONTROL_MAP = {
 	{
-		control = GLOBAL.Controls.Digital.MENU_ONCE_RIGHT,
+		control = Controls.Digital.MENU_ONCE_RIGHT,
 		hint = function(self, left, right)
 			-- table.insert(right, loc.format(LOC"UI.CONTROLS.NEXT", Controls.Digital.MENU_ONCE_RIGHT))
 		end,
@@ -60,7 +60,7 @@ OptionsScreenSpinnerRow.CONTROL_MAP = {
 		end,
 	},
 	{
-		control = GLOBAL.Controls.Digital.MENU_ONCE_LEFT,
+		control = Controls.Digital.MENU_ONCE_LEFT,
 		hint = function(self, left, right)
 			-- table.insert(right, loc.format(LOC"UI.CONTROLS.PREV", Controls.Digital.MENU_ONCE_LEFT))
 		end,
@@ -126,10 +126,10 @@ function OptionsScreenSpinnerRow:OnFocusChange(hasFocus)
 end
 
 function OptionsScreenSpinnerRow:SetValues(values)
-	GLOBAL.assert(type(values[1].data) ~= "boolean", "Use OptionsScreenToggleRow for bools.")
+	assert(type(values[1].data) ~= "boolean", "Use OptionsScreenToggleRow for bools.")
 	-- I don't think there's a hard requirement on type, but you probably want
 	-- an enum string since settings has support for them.
-	GLOBAL.assert(type(values[1].data) == "string" or type(values[1].data) == "number", "Are you storing the right kind of data?")
+	assert(type(values[1].data) == "string" or type(values[1].data) == "number", "Are you storing the right kind of data?")
 
 	OptionsScreenSpinnerRow._base.SetValues(self, values)
 	if #self.values > 0 then
@@ -191,3 +191,5 @@ function OptionsScreenSpinnerRow:OnArrowLeft()
 	end
 	return self
 end
+
+return OptionsScreenSpinnerRow

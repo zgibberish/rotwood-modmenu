@@ -8,7 +8,7 @@ local easing = require "util.easing"
 ------------------------------------------------------------------------------------------
 --- A basic option row. Selectable, but doesn't do anything on its own. Meant to be extended
 ----
-OptionsScreenBaseRow = Class(Clickable, function(self, width, rightColumnWidth)
+local OptionsScreenBaseRow = Class(Clickable, function(self, width, rightColumnWidth)
 	Clickable._ctor(self, "OptionsScreenBaseRow")
 
 	-- Set up sizings
@@ -21,14 +21,14 @@ OptionsScreenBaseRow = Class(Clickable, function(self, width, rightColumnWidth)
 	self.height = 110
 
 	-- Set up colors
-	self.bgSelectedColor = GLOBAL.UICOLORS.FOCUS
-	self.bgUnselectedColor = GLOBAL.HexToRGB(0xF6B74200)
+	self.bgSelectedColor = UICOLORS.LIGHT_BACKGROUNDS_MID
+	self.bgUnselectedColor = UICOLORS.LIGHT_BACKGROUNDS_LIGHT
 
-	self.titleSelectedColor = GLOBAL.UICOLORS.BACKGROUND_DARK
-	self.titleUnselectedColor = GLOBAL.UICOLORS.LIGHT_TEXT
+	self.titleSelectedColor = UICOLORS.LIGHT_TEXT_DARKER
+	self.titleUnselectedColor = UICOLORS.DARK_TEXT
 
-	self.subtitleSelectedColor = GLOBAL.UICOLORS.BACKGROUND_MID
-	self.subtitleUnselectedColor = GLOBAL.UICOLORS.LIGHT_TEXT_DARKER
+	self.subtitleSelectedColor = UICOLORS.BACKGROUND_MID
+	self.subtitleUnselectedColor = UICOLORS.LIGHT_TEXT_DARKER
 
 	-- Build background
 	self.bg = self:AddChild(Panel("images/ui_ftf_options/listrow_bg.tex"))
@@ -37,7 +37,7 @@ OptionsScreenBaseRow = Class(Clickable, function(self, width, rightColumnWidth)
 		:SetMultColor(self.bgUnselectedColor)
 	self.rightColumnHitbox = self:AddChild(Image("images/global/square.tex"))
 		:SetSize(self.rightColumnWidth, self.height)
-		:SetMultColor(GLOBAL.HexToRGB(0xff00ff30))
+		:SetMultColor(HexToRGB(0xff00ff30))
 		:LayoutBounds("right", "center", self.bg)
 		:Offset(-self.paddingH, 0)
 		:SetMultColorAlpha(0)
@@ -45,10 +45,10 @@ OptionsScreenBaseRow = Class(Clickable, function(self, width, rightColumnWidth)
 
 	-- Add text
 	self.textContainer = self:AddChild(Widget("Text Container"))
-	self.title = self.textContainer:AddChild(Text(GLOBAL.FONTFACE.DEFAULT, GLOBAL.FONTSIZE.OPTIONS_ROW_TITLE, "", GLOBAL.UICOLORS.WHITE))
+	self.title = self.textContainer:AddChild(Text(FONTFACE.DEFAULT, FONTSIZE.OPTIONS_ROW_TITLE, "", UICOLORS.WHITE))
 		:LeftAlign()
-	self.subtitle = self.textContainer:AddChild(Text(GLOBAL.FONTFACE.DEFAULT, GLOBAL.FONTSIZE.OPTIONS_ROW_SUBTITLE, "", GLOBAL.UICOLORS.WHITE))
-		:OverrideLineHeight(GLOBAL.FONTSIZE.OPTIONS_ROW_SUBTITLE * 0.85)
+	self.subtitle = self.textContainer:AddChild(Text(FONTFACE.DEFAULT, FONTSIZE.OPTIONS_ROW_SUBTITLE, "", UICOLORS.WHITE))
+		:OverrideLineHeight(FONTSIZE.OPTIONS_ROW_SUBTITLE * 0.85)
 		:LeftAlign()
 
 	-- Add right column container
@@ -175,3 +175,5 @@ function OptionsScreenBaseRow:OnFocusChange(hasFocus)
 
 	return self
 end
+
+return OptionsScreenBaseRow

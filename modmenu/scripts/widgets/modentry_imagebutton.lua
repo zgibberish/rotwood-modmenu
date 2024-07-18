@@ -4,7 +4,7 @@ local Image = require "widgets.image"
 local easing = require "util.easing"
 
 -- image button meant to be placed in line next to a mod entry (star button, config button, ...)
-ModEntryImageButton = Class(Clickable, function(self, texture, width, height)
+local ModEntryImageButton = Class(Clickable, function(self, texture, width, height)
     Clickable._ctor(self, "ModEntryImageButton")
 
     -- Set up sizings
@@ -15,11 +15,11 @@ ModEntryImageButton = Class(Clickable, function(self, texture, width, height)
 	self.height = height or 110
 
     -- Set up colors
-	self.bgSelectedColor = GLOBAL.UICOLORS.FOCUS
-	self.bgUnselectedColor = GLOBAL.HexToRGB(0xF6B74200)
+	self.bgSelectedColor = UICOLORS.LIGHT_BACKGROUNDS_MID
+	self.bgUnselectedColor = UICOLORS.LIGHT_BACKGROUNDS_LIGHT
 
-	self.imageSelectedColor = GLOBAL.UICOLORS.BACKGROUND_DARK
-	self.imageUnselectedColor = GLOBAL.UICOLORS.LIGHT_TEXT
+	self.imageSelectedColor = UICOLORS.BACKGROUND_LIGHT
+	self.imageUnselectedColor = UICOLORS.BACKGROUND_LIGHT
 
 	-- Build background
 	self.bg = self:AddChild(Panel("images/ui_ftf_options/listrow_bg.tex"))
@@ -53,3 +53,5 @@ function ModEntryImageButton:SetImageOffset(x, y)
 	self.image:Offset(x,y)
 	return self
 end
+
+return ModEntryImageButton

@@ -2,12 +2,12 @@ local CheckBox = require "widgets.checkbox"
 local easing = require "util.easing"
 local kassert = require "util.kassert"
 
-modimport("widgets/optionsscreenbaserow")
+local OptionsScreenBaseRow = require "widgets/optionsscreenbaserow"
 
 ------------------------------------------------------------------------------------------
 --- Displays a row with an on/off toggle option
 ----
-OptionsScreenToggleRow = Class(OptionsScreenBaseRow, function(self, width, rightColumnWidth)
+local OptionsScreenToggleRow = Class(OptionsScreenBaseRow, function(self, width, rightColumnWidth)
 	OptionsScreenBaseRow._ctor(self, width, rightColumnWidth)
 	self:SetName("OptionsScreenToggleRow")
 
@@ -18,7 +18,7 @@ OptionsScreenToggleRow = Class(OptionsScreenBaseRow, function(self, width, right
 	self.arrowSelectedColor = self.titleSelectedColor
 	self.arrowFocusColor = self.subtitleSelectedColor
 	self.arrowUnselectedColor = self.titleUnselectedColor
-	self.paginationUnselectedColor = GLOBAL.HexToRGB(0xB6965500)
+	self.paginationUnselectedColor = HexToRGB(0xB6965500)
 
 	self:SetControlDownSound(nil)
 	self:SetControlUpSound(nil)
@@ -108,12 +108,14 @@ function OptionsScreenToggleRow:OnClick()
 		end
 
 		if self.currentIndex == 1 then
-			GLOBAL.TheFrontEnd:GetSound():PlaySound(self.toggleButton.toggleon_sound)
+			TheFrontEnd:GetSound():PlaySound(self.toggleButton.toggleon_sound)
 		else
-			GLOBAL.TheFrontEnd:GetSound():PlaySound(self.toggleButton.toggleoff_sound)
+			TheFrontEnd:GetSound():PlaySound(self.toggleButton.toggleoff_sound)
 		end
 
 		self:_SetValue(self.currentIndex)
 	end
 	return self
 end
+
+return OptionsScreenToggleRow

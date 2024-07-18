@@ -6,7 +6,7 @@ local Image = require "widgets.image"
 ------------------------------------------------------------------------------------------
 --- Displays a title widget for the controls panel, for cate gory separation
 ----
-OptionsScreenCategoryTitle = Class(Widget, function(self, width, text)
+local OptionsScreenCategoryTitle = Class(Widget, function(self, width, text)
 	Widget._ctor(self, "OptionsScreenCategoryTitle")
 
 	self.hitbox = self:AddChild(Image("images/global/square.tex"))
@@ -14,8 +14,8 @@ OptionsScreenCategoryTitle = Class(Widget, function(self, width, text)
 
 	self.background = self:AddChild(Panel("images/ui_ftf_options/titlerow_bg.tex"))
 		:SetNineSliceCoords(30, 0, 370, 100)
-		:SetMultColor(GLOBAL.UICOLORS.LIGHT_TEXT)
-	self.title = self:AddChild(Text(GLOBAL.FONTFACE.DEFAULT, GLOBAL.FONTSIZE.OPTIONS_ROW_TITLE, text, GLOBAL.UICOLORS.BACKGROUND_DARK))
+		:SetMultColor(UICOLORS.LIGHT_TEXT)
+	self.title = self:AddChild(Text(FONTFACE.DEFAULT, FONTSIZE.OPTIONS_ROW_TITLE, text, UICOLORS.BACKGROUND_LIGHT))
 
 	-- Resize the background to the text
 	local w, h = self.title:GetSize()
@@ -27,3 +27,5 @@ OptionsScreenCategoryTitle = Class(Widget, function(self, width, text)
 		:Offset(-4, 0)
 
 end)
+
+return OptionsScreenCategoryTitle
