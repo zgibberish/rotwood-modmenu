@@ -1,4 +1,4 @@
-local ImageButton = require --[[  ]]"widgets.imagebutton"
+local ImageButton = require "widgets.imagebutton"
 local Text = require "widgets.text"
 local easing = require "util.easing"
 
@@ -12,18 +12,15 @@ local OptionsScreenSpinnerRow = Class(OptionsScreenBaseRow, function(self, width
 	OptionsScreenBaseRow._ctor(self, width, rightColumnWidth)
 	self:SetName("OptionsScreenSpinnerRow")
 
-
 	-- Set up sizings
 	self.arrowSize = 60
 	self.valueTextWidth = self.rightColumnWidth - self.arrowSize * 2
-
 
 	-- Set up colors
 	self.arrowSelectedColor = self.titleSelectedColor
 	self.arrowFocusColor = self.subtitleSelectedColor
 	self.arrowUnselectedColor = self.titleUnselectedColor
 	self.paginationUnselectedColor = HexToRGB(0xB6965500)
-
 
 	-- Build right column contents
 	self.valueLeftArrow = self.rightContainer:AddChild(ImageButton("images/ui_ftf_options/pagination_left.tex"))

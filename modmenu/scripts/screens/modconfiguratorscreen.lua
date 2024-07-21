@@ -8,7 +8,6 @@ local Text = require "widgets.text"
 local Widget = require "widgets.widget"
 local easing = require "util.easing"
 local fmodtable = require "defs.sound.fmodtable"
-local lume = require "util.lume"
 local templates = require "widgets.ftf.templates"
 local ImageButton = require "widgets.imagebutton"
 
@@ -22,6 +21,7 @@ local MOD_ENTRY_BUTTON_WIDTH = 200
 -- a simplified version of OptionsScreen
 local ModConfiguratorScreen = Class(Screen, function(self, modname)
     Screen._ctor(self, "ModConfiguratorScreen")
+	
     self.modname = modname
     local mod_is_client = false
     if KnownModIndex.savedata.known_mods[modname] and KnownModIndex.savedata.known_mods[modname] and KnownModIndex.savedata.known_mods[modname].modinfo and KnownModIndex.savedata.known_mods[modname].modinfo.client_only_mod and KnownModIndex.savedata.known_mods[modname].modinfo.client_only_mod == true then

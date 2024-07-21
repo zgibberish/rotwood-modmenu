@@ -5,6 +5,7 @@ local ModEntryImageButton = require "widgets/modentry_imagebutton"
 
 local ModEntryImageButtonToggle = Class(ModEntryImageButton, function(self, texture, width, height)
     ModEntryImageButton._ctor(self, texture, width, height)    
+    self:SetName("ModEntryImageButtonToggle")
 
     self.IMAGE_COLOR_DISABLED = UICOLORS.LIGHT_BACKGROUNDS_DARK
     self.IMAGE_COLOR_ENABLED = UICOLORS.BACKGROUND_LIGHT
