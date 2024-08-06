@@ -23,11 +23,7 @@ local ModConfiguratorScreen = Class(Screen, function(self, modname)
     Screen._ctor(self, "ModConfiguratorScreen")
 	
     self.modname = modname
-    local mod_is_client = false
-    if KnownModIndex.savedata.known_mods[modname] and KnownModIndex.savedata.known_mods[modname] and KnownModIndex.savedata.known_mods[modname].modinfo and KnownModIndex.savedata.known_mods[modname].modinfo.client_only_mod and KnownModIndex.savedata.known_mods[modname].modinfo.client_only_mod == true then
-        mod_is_client = true
-    end
-    self.configuration_options = KnownModIndex:LoadModConfigurationOptions(modname, mod_is_client)
+    self.configuration_options = KnownModIndex:LoadModConfigurationOptions(modname, true)
 	self.configuration_options_backup = deepcopy(self.configuration_options)
 
     -- Setup sizings
@@ -393,8 +389,7 @@ function ModConfiguratorScreen:IsDirty()
 end
 
 function ModConfiguratorScreen:_SaveChanges()
-	-- placeholder: save mod configs and update self.configuration_options to match the saved data
-	KnownModIndex:SaveConfigurationOptions(function() end, self.modname, self.configuration_options, self.mod_is_client)
+	KnownModIndex:SaveConfigurationOptions(function() end, self.modname, self.configuration_options, true)
 	self.configuration_options_backup = deepcopy(self.configuration_options)
 	self:MakeDirty() -- update dirty status
 	return false
