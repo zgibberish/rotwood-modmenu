@@ -138,7 +138,7 @@ local function OptionsScreen_AddModsTab(self)
                 table.sort(list_server, ModSortingComparators[SELECTED_SORTING_METHOD])
             end
             for _, modname in ipairs(list_server) do
-                _AddModEntry(modname)
+                AddModEntry(modname)
             end
 
             self.pages.mods.mod_entries:LayoutChildrenInColumn(self.rowSpacing * 0.5)
