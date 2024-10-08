@@ -10,6 +10,7 @@ gorge_compatible = false
 dont_starve_compatible = false
 reign_of_giants_compatible = false
 shipwrecked_compatible = false
+rotwood_compatible = true
 
 client_only_mod = true
 all_clients_require_mod = false
