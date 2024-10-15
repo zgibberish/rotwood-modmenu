@@ -18,7 +18,11 @@ end)
 function ModEntryToggleRow:SetModIcon(tex)
     self.modicon_container.icon
         :SetTexture(tex)
-        :SetSize(256, 256)
+
+        -- removed modicon size constraint
+        -- (mods wil have to manage that themselves, more on this
+        -- in documentation)
+        -- :SetSize(256, 256)
 end
 
 function ModEntryToggleRow:Layout()
