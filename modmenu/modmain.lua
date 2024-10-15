@@ -29,7 +29,7 @@ local function PrepareModIcon(modname)
     end
 end
 
-local function OptionsScreen_AddModsTab(self)
+AddClassPostConstruct("screens/optionsscreen", function(self)
     if self.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil then
         return
     end
@@ -91,7 +91,6 @@ local function OptionsScreen_AddModsTab(self)
         self.pages.mods:LayoutChildrenInColumn(self.rowSpacing * 0.5)
     end
 
-
     self.tabs.mods = self.nav_tabs:AddIconTextTab("images/icons_ftf/stat_luck.tex", "Mods")
     self.tabs.mods:SetGainFocusSound(fmodtable.Event.hover)
 
@@ -129,6 +128,4 @@ local function OptionsScreen_AddModsTab(self)
 
     self.pages.mods.mod_entries = self.pages.mods:AddChild(Widget("Mod Entries"))
     LayoutModEntries()
-end
-
-AddClassPostConstruct("screens/optionsscreen", OptionsScreen_AddModsTab)
+end)
