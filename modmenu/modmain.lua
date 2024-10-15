@@ -60,7 +60,8 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         -- the list will be sorted alphabetically first, then favorites first on
         -- top of that
 
-        -- mods are shown sorted by their fancy name (the name defined in modinfo), if there is no fancy name, the moddir name is used
+        -- mods are shown sorted by their fancy name (the name defined in modinfo),
+        -- if there is no fancy name, the moddir name is used
 
         -- CLIENT MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Client Mods"))
