@@ -12,17 +12,14 @@ local ModEntryToggleRow = Class(OptionsScreenToggleRow, function(self, width, ri
         :SetScale(1.01)
         :SetMask()
     self.modicon_container.icon = self.modicon_container:AddChild(Image())
+        :SetHiddenBoundingBox(true) -- (!!!) disables this widget's bounding box?? (so big images dont push other stuff around)
         :SetMasked(not bypassModiconMask)
 end)
 
 function ModEntryToggleRow:SetModIcon(tex)
     self.modicon_container.icon
         :SetTexture(tex)
-
-    -- removed modicon size constraint
-    -- (mods wil have to manage that themselves, more on this
-    -- in documentation)
-    -- :SetSize(256, 256)
+    self:Layout()
 end
 
 function ModEntryToggleRow:Layout()
