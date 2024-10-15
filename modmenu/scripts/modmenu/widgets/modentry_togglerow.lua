@@ -1,6 +1,6 @@
 local Widget = require "widgets.widget"
 local Image = require "widgets.image"
-local OptionsScreenToggleRow = require "modmenu/widgets/optionsscreentogglerow"
+local OptionsScreenToggleRow = require "modmenu.widgets.optionsscreentogglerow"
 
 local DEFAULT_LEFT_PADDING = 260
 local ModEntryToggleRow = Class(OptionsScreenToggleRow, function(self, width, rightColumnWidth, bypassModiconMask)

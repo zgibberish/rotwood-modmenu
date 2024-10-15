@@ -1,9 +1,9 @@
 local Widget = require "widgets.widget"
 
-local ModEntryToggleRow = require "modmenu/widgets/modentry_togglerow"
-local ModEntryImageButton = require "modmenu/widgets/modentry_imagebutton"
-local ModEntryImageButtonToggle = require "modmenu/widgets/modentry_imagebutton_toggle"
-local ModConfiguratorScreen = require "modmenu/screens/modconfiguratorscreen"
+local ModEntryToggleRow = require "modmenu.widgets.modentry_togglerow"
+local ModEntryImageButton = require "modmenu.widgets.modentry_imagebutton"
+local ModEntryImageButtonToggle = require "modmenu.widgets.modentry_imagebutton_toggle"
+local ModConfiguratorScreen = require "modmenu.screens.modconfiguratorscreen"
 
 local function GetModFancyName(modname)
     -- returns modname if no fancy name is found,, never nil

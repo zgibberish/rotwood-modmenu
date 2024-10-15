@@ -8,11 +8,11 @@ local KnownModIndex = GLOBAL.KnownModIndex
 local Widget = require "widgets.widget"
 local fmodtable = require "defs.sound.fmodtable"
 
-local OptionScreenModMenuReloadButton = require "modmenu/widgets/optionsscreen_modmenu_reloadbutton"
-local ModEntry = require "modmenu/widgets/modentry"
-local OptionsScreenCategoryTitle = require "modmenu/widgets/optionsscreencategorytitle"
-local OptionsScreenSpinnerRow = require "modmenu/widgets/optionsscreenspinnerrow"
-local ModSortingComparators = require "modmenu/modsortingcomparators"
+local OptionScreenModMenuReloadButton = require "modmenu.widgets.optionsscreen_modmenu_reloadbutton"
+local ModEntry = require "modmenu.widgets.modentry"
+local OptionsScreenCategoryTitle = require "modmenu.widgets.optionsscreencategorytitle"
+local OptionsScreenSpinnerRow = require "modmenu.widgets.optionsscreenspinnerrow"
+local ModSortingComparators = require "modmenu.modsortingcomparators"
 
 local DEFAULT_SORTING_METHOD = 1
 local SELECTED_SORTING_METHOD = DEFAULT_SORTING_METHOD
@@ -29,7 +29,7 @@ local function PrepareModIcon(modname)
     end
 end
 
-AddClassPostConstruct("screens/optionsscreen", function(self)
+AddClassPostConstruct("screens.optionsscreen", function(self)
     if self.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil then
         return
     end

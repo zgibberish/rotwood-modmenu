@@ -4,7 +4,7 @@ local easing = require "util.easing"
 
 local OptionsScreenBaseRow = require "screens.options.optionsscreenbaserow"
 
-local OptionsRowPagination = require "widgets/paginationdots"
+local OptionsRowPagination = require "widgets.paginationdots"
 
 ------------------------------------------------------------------------------------------
 --- An option row that allows you to loop through discrete values

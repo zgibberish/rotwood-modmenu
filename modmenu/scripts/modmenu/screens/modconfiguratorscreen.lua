@@ -13,9 +13,9 @@ local ImageButton = require "widgets.imagebutton"
 
 local OptionsScreenBaseRow = require "screens.options.optionsscreenbaserow"
 
-local OptionsScreenCategoryTitle = require "modmenu/widgets/optionsscreencategorytitle"
-local OptionsScreenSpinnerRow = require "modmenu/widgets/optionsscreenspinnerrow"
-local ModEntryImageButton = require "modmenu/widgets/modentry_imagebutton"
+local OptionsScreenCategoryTitle = require "modmenu.widgets.optionsscreencategorytitle"
+local OptionsScreenSpinnerRow = require "modmenu.widgets.optionsscreenspinnerrow"
+local ModEntryImageButton = require "modmenu.widgets.modentry_imagebutton"
 
 local MOD_ENTRY_BUTTON_WIDTH = 200
 
