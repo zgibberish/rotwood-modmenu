@@ -2,7 +2,8 @@ local ImageButton = require "widgets.imagebutton"
 local Text = require "widgets.text"
 local easing = require "util.easing"
 
-local OptionsScreenBaseRow = require "widgets/optionsscreenbaserow"
+local OptionsScreenBaseRow = require "screens.options.optionsscreenbaserow"
+
 local OptionsRowPagination = require "widgets/paginationdots"
 
 ------------------------------------------------------------------------------------------

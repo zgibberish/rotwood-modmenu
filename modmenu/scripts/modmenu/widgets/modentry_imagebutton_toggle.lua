@@ -1,7 +1,7 @@
 local kassert = require "util.kassert"
 local fmodtable = require "defs.sound.fmodtable"
 
-local ModEntryImageButton = require "widgets/modentry_imagebutton"
+local ModEntryImageButton = require "modmenu/widgets/modentry_imagebutton"
 
 local ModEntryImageButtonToggle = Class(ModEntryImageButton, function(self, texture, width, height)
     ModEntryImageButton._ctor(self, texture, width, height)    

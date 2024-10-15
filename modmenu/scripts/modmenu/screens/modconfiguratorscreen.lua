@@ -11,10 +11,11 @@ local fmodtable = require "defs.sound.fmodtable"
 local templates = require "widgets.ftf.templates"
 local ImageButton = require "widgets.imagebutton"
 
-local OptionsScreenCategoryTitle = require "widgets/optionsscreencategorytitle"
-local OptionsScreenBaseRow = require "widgets/optionsscreenbaserow"
-local OptionsScreenSpinnerRow = require "widgets/optionsscreenspinnerrow"
-local ModEntryImageButton = require "widgets/modentry_imagebutton"
+local OptionsScreenBaseRow = require "screens.options.optionsscreenbaserow"
+
+local OptionsScreenCategoryTitle = require "modmenu/widgets/optionsscreencategorytitle"
+local OptionsScreenSpinnerRow = require "modmenu/widgets/optionsscreenspinnerrow"
+local ModEntryImageButton = require "modmenu/widgets/modentry_imagebutton"
 
 local MOD_ENTRY_BUTTON_WIDTH = 200
 
