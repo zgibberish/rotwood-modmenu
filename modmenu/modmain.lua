@@ -1,3 +1,7 @@
+Assets = {
+    Asset("IMAGE", "images/modicon_blank.png")
+}
+
 local Widget = require "widgets.widget"
 local OptionsScreenCategoryTitle = require "widgets/optionsscreencategorytitle"
 local OptionsScreenBaseRow = require "widgets/optionsscreenbaserow"
