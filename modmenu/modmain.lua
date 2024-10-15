@@ -14,7 +14,7 @@ local OptionsScreenCategoryTitle = require "modmenu.widgets.optionsscreencategor
 local OptionsScreenSpinnerRow = require "modmenu.widgets.optionsscreenspinnerrow"
 local ModSortingComparators = require "modmenu.modsortingcomparators"
 
-local DEFAULT_SORTING_METHOD = 1 --Alphabetical
+local DEFAULT_SORTING_METHOD <const> = 1 --Alphabetical
 local SELECTED_SORTING_METHOD = DEFAULT_SORTING_METHOD
 
 local function PrepareModIcon(modname)
@@ -29,12 +29,25 @@ local function PrepareModIcon(modname)
     end
 end
 
+local function SortMods(modtable, sort_fn_index) 
+    -- using ModSortingComparators
+    if sort_fn_index == 7 then --FavoritesFirst
+        table.sort(modtable, ModSortingComparators[1]) --Alphabetical
+        table.sort(modtable, ModSortingComparators[7]) --FavoritesFirst
+    else
+        table.sort(modtable, ModSortingComparators[sort_fn_index])
+    end
+end
+
 AddClassPostConstruct("screens.optionsscreen", function(self)
     if self.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil then
+        print("modmenu optionsscreen postconstruct failed?")
+        print("->    self.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil")
         return
     end
     
-    local function LayoutModEntries()
+    --NOTE: this is only the definition, LayoutModEntries gets called last
+    local function LayoutModEntries() 
         self.pages.mods.mod_entries:RemoveAllChildren()
 
         --NOTE: there are basically no differences between client and server
@@ -52,12 +65,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         -- CLIENT MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Client Mods"))
         local list_client = KnownModIndex:GetClientModNames()
-        if SELECTED_SORTING_METHOD == 7 then --FavoritesFirst
-            table.sort(list_client, ModSortingComparators[1]) --Alphabetical
-            table.sort(list_client, ModSortingComparators[7]) --FavoritesFirst
-        else
-            table.sort(list_client, ModSortingComparators[SELECTED_SORTING_METHOD])
-        end
+        SortMods(list_client, SELECTED_SORTING_METHOD)
         for _, modname in ipairs(list_client) do
             PrepareModIcon(modname)
             self.pages.mods.mod_entries:AddChild(ModEntry(modname, self.rowWidth))
@@ -71,12 +79,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         -- SERVER MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Server Mods"))
         local list_server = KnownModIndex:GetServerModNames()
-        if SELECTED_SORTING_METHOD == 7 then --FavoritesFirst
-            table.sort(list_server, ModSortingComparators[1]) --Alphabetical
-            table.sort(list_server, ModSortingComparators[7]) --FavoritesFirst
-        else
-            table.sort(list_server, ModSortingComparators[SELECTED_SORTING_METHOD])
-        end
+        SortMods(list_server, SELECTED_SORTING_METHOD)
         for _, modname in ipairs(list_server) do
             PrepareModIcon(modname)
             self.pages.mods.mod_entries:AddChild(ModEntry(modname, self.rowWidth))
