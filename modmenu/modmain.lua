@@ -14,7 +14,7 @@ local OptionsScreenCategoryTitle = require "modmenu.widgets.optionsscreencategor
 local OptionsScreenSpinnerRow = require "modmenu.widgets.optionsscreenspinnerrow"
 local ModSortingComparators = require "modmenu.modsortingcomparators"
 
-local DEFAULT_SORTING_METHOD = 1
+local DEFAULT_SORTING_METHOD = 1 --Alphabetical
 local SELECTED_SORTING_METHOD = DEFAULT_SORTING_METHOD
 
 local function PrepareModIcon(modname)
@@ -52,9 +52,9 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         -- CLIENT MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Client Mods"))
         local list_client = KnownModIndex:GetClientModNames()
-        if SELECTED_SORTING_METHOD == 7 then
-            table.sort(list_client, ModSortingComparators[1])
-            table.sort(list_client, ModSortingComparators[7])
+        if SELECTED_SORTING_METHOD == 7 then --FavoritesFirst
+            table.sort(list_client, ModSortingComparators[1]) --Alphabetical
+            table.sort(list_client, ModSortingComparators[7]) --FavoritesFirst
         else
             table.sort(list_client, ModSortingComparators[SELECTED_SORTING_METHOD])
         end
@@ -62,7 +62,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
             PrepareModIcon(modname)
             self.pages.mods.mod_entries:AddChild(ModEntry(modname, self.rowWidth))
                 :SetOnFavoriteUpdatedFn(function()
-                    if SELECTED_SORTING_METHOD == 7 then
+                    if SELECTED_SORTING_METHOD == 7 then --Alphabetical
                         LayoutModEntries()
                     end
                 end)
@@ -71,9 +71,9 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         -- SERVER MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Server Mods"))
         local list_server = KnownModIndex:GetServerModNames()
-        if SELECTED_SORTING_METHOD == 7 then
-            table.sort(list_server, ModSortingComparators[1])
-            table.sort(list_server, ModSortingComparators[7])
+        if SELECTED_SORTING_METHOD == 7 then --FavoritesFirst
+            table.sort(list_server, ModSortingComparators[1]) --Alphabetical
+            table.sort(list_server, ModSortingComparators[7]) --FavoritesFirst
         else
             table.sort(list_server, ModSortingComparators[SELECTED_SORTING_METHOD])
         end
@@ -81,7 +81,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
             PrepareModIcon(modname)
             self.pages.mods.mod_entries:AddChild(ModEntry(modname, self.rowWidth))
                 :SetOnFavoriteUpdatedFn(function()
-                    if SELECTED_SORTING_METHOD == 7 then
+                    if SELECTED_SORTING_METHOD == 7 then --FavoritesFirst
                         LayoutModEntries()
                     end
                 end)
@@ -111,14 +111,14 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
     -- sort method spinner option (sort by.../.../...)
     self.pages.mods:AddChild(OptionsScreenSpinnerRow(self.rowWidth, self.rowRightColumnWidth))
         :SetText("Sort by", "Sort mods by this method.")
-        :SetValues({
-            { name = "Name",              data = 1 },
-            { name = "Name Descending",   data = 2 },
-            { name = "Author",            data = 3 },
-            { name = "Author Descending", data = 4 },
-            { name = "Enabled First",     data = 5 },
-            { name = "Disabled First",    data = 6 },
-            { name = "Favorites First",   data = 7 },
+        :SetValues({ -- only number data works right (i tried)
+            { name = "Name",              data = 1 }, --Alphabetical
+            { name = "Name Descending",   data = 2 }, --AlphabeticalReversed
+            { name = "Author",            data = 3 }, --Author
+            { name = "Author Descending", data = 4 }, --AuthorReversed
+            { name = "Enabled First",     data = 5 }, --EnabledFirst
+            { name = "Disabled First",    data = 6 }, --DisabledFirst
+            { name = "Favorites First",   data = 7 }, --FavoritesFirst
         })
         :_SetValue(SELECTED_SORTING_METHOD)
         :SetOnValueChangeFn(function(data)
