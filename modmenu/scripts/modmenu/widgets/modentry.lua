@@ -150,6 +150,8 @@ end
 
 function ModEntry:SetOnFavoriteUpdatedFn(fn)
     self.onfavoriteupdated_fn = fn
+    
+    return self
 end
 
 return ModEntry

@@ -20,6 +20,8 @@ function ModEntryToggleRow:SetModIcon(tex)
     self.modicon_container.icon
         :SetTexture(tex)
     self:Layout()
+
+    return self
 end
 
 function ModEntryToggleRow:Layout()
@@ -33,6 +35,8 @@ function ModEntryToggleRow:Layout()
 		:LayoutBounds("left", "below", self.title)
 		:Offset(0, 2)
     self.textContainer:Offset(DEFAULT_LEFT_PADDING, 0)
+
+    return self
 end
 
 return ModEntryToggleRow
