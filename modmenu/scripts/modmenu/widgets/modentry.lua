@@ -5,60 +5,41 @@ local ModEntryImageButton = require "modmenu.widgets.modentry_imagebutton"
 local ModEntryImageButtonToggle = require "modmenu.widgets.modentry_imagebutton_toggle"
 local ModConfiguratorScreen = require "modmenu.screens.modconfiguratorscreen"
 
+-- always assume KnownModIndex is available at the time this widget is used
+-- (so no basic nil checks needed)
+-- some functions below are just wrappers to return exactly what KnownModIndex
+-- or Profile returns, though i still prefer to keep them in case we need to
+-- implement anything extra later
+
+local function IsModEnabled(modname)
+    -- make sure to always return a bool cuz KnownModIndex:IsModEnabledAny can
+    -- return nil
+    return KnownModIndex:IsModEnabledAny(modname) or false
+end
+
+local function IsModFavorited(modname)
+    -- always return a bool, never nil
+    return Profile:IsModFavorited(modname)
+end
+
 local function GetModFancyName(modname)
     -- returns modname if no fancy name is found,, never nil
     return KnownModIndex:GetModFancyName(modname)
 end
 
-local function GetModDescription(modname)
-    if KnownModIndex:GetModInfo(modname)
-    and KnownModIndex:GetModInfo(modname).description then
-        return KnownModIndex:GetModInfo(modname).description
+local function GetModInfoValue(modname, key)
+    local info = KnownModIndex:GetModInfo(modname)
+    if not info or info[key] == nil then
+        return nil
     end
-    return ''
-end
 
-local function GetModAuthor(modname)
-    if KnownModIndex:GetModInfo(modname)
-    and KnownModIndex:GetModInfo(modname).author then
-        return KnownModIndex:GetModInfo(modname).author
-    end
-    return ''
-end
-
-local function GetModVersion(modname)
-    if KnownModIndex:GetModInfo(modname)
-    and KnownModIndex:GetModInfo(modname).version then
-        return KnownModIndex:GetModInfo(modname).version
-    end
-    return ''
-end
-
-local function IsModEnabled(modname)
-    if KnownModIndex
-    and KnownModIndex.savedata
-    and KnownModIndex.savedata.known_mods
-    and KnownModIndex.savedata.known_mods[modname]
-    and KnownModIndex.savedata.known_mods[modname].enabled then
-        return true
-    end
-    return false
-end
-
-local function IsModFavorited(modname)
-    return Profile:IsModFavorited(modname)
+    return info[key]
 end
 
 local function ModHasConfigurations(modname)
+    -- KnownModIndex:HasModConfigurationOptions always return a bool even if
+    -- mod does not exist, never nil
     return KnownModIndex:HasModConfigurationOptions(modname)
-end
-
-local function ModBypassesModiconMask(modname)
-    if KnownModIndex:GetModInfo(modname)
-    and KnownModIndex:GetModInfo(modname).modmenu_bypass_modicon_mask then
-        return true
-    end
-    return false
 end
 
 local SIDEBUTTONS_WIDTH = 200
@@ -67,32 +48,30 @@ local ModEntry = Class(Widget, function(self, modname, rowWidth)
     self.rowWidth = rowWidth
     self.info = {
         modname = modname,
-        modname_fancy = GetModFancyName(modname),
-        description = GetModDescription(modname),
-        author = GetModAuthor(modname),
-        version = GetModVersion(modname),
         enabled = IsModEnabled(modname),
         favorited = IsModFavorited(modname),
+        modname_fancy = GetModFancyName(modname),
+        description = GetModInfoValue(modname, "description") or "",
+        author = GetModInfoValue(modname, "author") or "",
+        version = GetModInfoValue(modname, "version") or "",
+        bypass_modicon_mask = GetModInfoValue(modname, "modmenu_bypass_modicon_mask") or false,
         has_configs = ModHasConfigurations(modname),
-        bypass_modicon_mask = ModBypassesModiconMask(modname),
     }
 
     self.root = self:AddChild(Widget("root"))
 
     -- main area: contains icon, title, and various descriptions about mod,
     -- can toggle on or off mod
-    local fancy_description = self:BuildFancyDescription()
+    local pretty_desc = self:BuildPrettyDescription()
     self.main_btn = self.root:AddChild(ModEntryToggleRow(self.rowWidth - SIDEBUTTONS_WIDTH - 10, nil, self.info.bypass_modicon_mask))
         :SetName("main button")
         :SetText(self.info.modname_fancy)
         :SetValues({
-            { desc = fancy_description, data = true},
-            { desc = fancy_description, data = false},
+            { desc = pretty_desc, data = true},
+            { desc = pretty_desc, data = false},
         })
         :_SetValue(self.info.enabled and 1 or 2)
         :SetOnValueChangeFn(function(data)
-            if not KnownModIndex then return end
-
             if data then
                 KnownModIndex:Enable(modname)
             else
@@ -100,9 +79,11 @@ local ModEntry = Class(Widget, function(self, modname, rowWidth)
             end
         end)
         
-    local info = KnownModIndex:GetModInfo(modname)
-    if info ~= nil and info.iconpath ~= nil then
-        self.main_btn:SetModIcon(info.iconpath)
+    local iconpath = GetModInfoValue(modname, "iconpath")
+    if iconpath then
+        -- SetTexture will freak out if provided with a nil tex path lol
+        -- (empty strings are fien tho)
+        self.main_btn:SetModIcon(iconpath)
     end
     
     self.sidebuttons_container = self.root:AddChild(Widget("side buttons"))
@@ -141,7 +122,7 @@ local ModEntry = Class(Widget, function(self, modname, rowWidth)
     self.root:LayoutChildrenInRow(10)
 end)
 
-function ModEntry:BuildFancyDescription()
+function ModEntry:BuildPrettyDescription()
     return self.info.description..
         "\n<i>Author: "..self.info.author..
         "\nVersion: "..self.info.version..
