@@ -111,7 +111,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
 
     -- sort method spinner option (sort by.../.../...)
     self.pages.mods:AddChild(OptionsScreenSpinnerRow(self.rowWidth, self.rowRightColumnWidth))
-        :SetText("Sort by", "Sort mods by this method.")
+        :SetText("Sort by", "Show mods in this order")
         :SetValues({ -- only number data works right (i tried)
             { name = "Favorites First",   data = 1 }, --FavoritesFirst
             { name = "Name",              data = 1 }, --Alphabetical
