@@ -14,7 +14,7 @@ local OptionsScreenCategoryTitle = require "modmenu.widgets.optionsscreencategor
 local OptionsScreenSpinnerRow = require "modmenu.widgets.optionsscreenspinnerrow"
 local ModSortingComparators = require "modmenu.modsortingcomparators"
 
-local DEFAULT_SORTING_METHOD <const> = 1 --Alphabetical
+local DEFAULT_SORTING_METHOD <const> = 1 --FavoritesFirst
 local SELECTED_SORTING_METHOD = DEFAULT_SORTING_METHOD
 
 local function PrepareModIcon(modname)
@@ -30,10 +30,16 @@ local function PrepareModIcon(modname)
 end
 
 local function SortMods(modtable, sort_fn_index) 
+    --NOTE (favorites first sorting): if you select sort by favorited first,
+        -- the list will be sorted alphabetically first, then favorites first
+        -- on top of that.
+    -- mods shown are sorted by their fancy name (the name defined in modinfo),
+    -- if there is no fancy name, the moddir name is used
+
     -- using ModSortingComparators
-    if sort_fn_index == 7 then --FavoritesFirst
-        table.sort(modtable, ModSortingComparators[1]) --Alphabetical
-        table.sort(modtable, ModSortingComparators[7]) --FavoritesFirst
+    if sort_fn_index == 1 then --FavoritesFirst
+        table.sort(modtable, ModSortingComparators[2]) --Alphabetical
+        table.sort(modtable, ModSortingComparators[1]) --FavoritesFirst
     else
         table.sort(modtable, ModSortingComparators[sort_fn_index])
     end
@@ -56,12 +62,11 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         -- but you can still set that property in your mod and it will be
         -- categorized based on that because why not.
 
-        --NOTE (favorites first sorting): if you select sort by favorited first,
-        -- the list will be sorted alphabetically first, then favorites first on
-        -- top of that
-
-        -- mods are shown sorted by their fancy name (the name defined in modinfo),
-        -- if there is no fancy name, the moddir name is used
+        local function onfavoriteupdated()
+            if SELECTED_SORTING_METHOD == 1 then --FavoritesFirst
+                LayoutModEntries()
+            end
+        end
 
         -- CLIENT MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Client Mods"))
@@ -70,11 +75,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         for _, modname in ipairs(list_client) do
             PrepareModIcon(modname)
             self.pages.mods.mod_entries:AddChild(ModEntry(modname, self.rowWidth))
-                :SetOnFavoriteUpdatedFn(function()
-                    if SELECTED_SORTING_METHOD == 7 then --Alphabetical
-                        LayoutModEntries()
-                    end
-                end)
+                :SetOnFavoriteUpdatedFn(onfavoriteupdated)
         end
 
         -- SERVER MODS
@@ -84,11 +85,7 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         for _, modname in ipairs(list_server) do
             PrepareModIcon(modname)
             self.pages.mods.mod_entries:AddChild(ModEntry(modname, self.rowWidth))
-                :SetOnFavoriteUpdatedFn(function()
-                    if SELECTED_SORTING_METHOD == 7 then --FavoritesFirst
-                        LayoutModEntries()
-                    end
-                end)
+                :SetOnFavoriteUpdatedFn(onfavoriteupdated)
         end
 
         self.pages.mods.mod_entries:LayoutChildrenInColumn(self.rowSpacing * 0.5)
@@ -116,13 +113,13 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
     self.pages.mods:AddChild(OptionsScreenSpinnerRow(self.rowWidth, self.rowRightColumnWidth))
         :SetText("Sort by", "Sort mods by this method.")
         :SetValues({ -- only number data works right (i tried)
+            { name = "Favorites First",   data = 1 }, --FavoritesFirst
             { name = "Name",              data = 1 }, --Alphabetical
             { name = "Name Descending",   data = 2 }, --AlphabeticalReversed
             { name = "Author",            data = 3 }, --Author
             { name = "Author Descending", data = 4 }, --AuthorReversed
             { name = "Enabled First",     data = 5 }, --EnabledFirst
-            { name = "Disabled First",    data = 6 }, --DisabledFirst
-            { name = "Favorites First",   data = 7 }, --FavoritesFirst
+            { name = "Disabled First",    data = 7 }, --DisabledFirst
         })
         :_SetValue(SELECTED_SORTING_METHOD)
         :SetOnValueChangeFn(function(data)

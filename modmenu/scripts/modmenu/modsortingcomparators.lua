@@ -1,3 +1,12 @@
+local function FavoritesFirst(a, b)
+    local favorited_a = Profile:IsModFavorited(a)
+    local favorited_b = Profile:IsModFavorited(b)
+    if favorited_a and not favorited_b then
+        return true
+    end
+    return false
+end
+
 local function Alphabetical(a, b)
     return KnownModIndex:GetModFancyName(a) < KnownModIndex:GetModFancyName(b)
 end
@@ -29,23 +38,14 @@ end
 
 local function DisabledFirst(a, b) return EnabledFirst(b, a) end
 
-local function FavoritesFirst(a, b)
-    local favorited_a = Profile:IsModFavorited(a)
-    local favorited_b = Profile:IsModFavorited(b)
-    if favorited_a and not favorited_b then
-        return true
-    end
-    return false
-end
-
 local ModSortingComparators = {
+    FavoritesFirst, -- favs first should be the default selected sorting order
     Alphabetical,
     AlphabeticalReversed,
     Author,
     AuthorReversed,
     EnabledFirst,
     DisabledFirst,
-    FavoritesFirst,
 }
 
 return ModSortingComparators
