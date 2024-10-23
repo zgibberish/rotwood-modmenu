@@ -1,7 +1,7 @@
 name = "Mod Menu"
 description = "GUI to view and manage installed mods, adds a \"Mods\" tab to the options screen."
 author = "gibberish"
-version = "2.0"
+version = "2.0.0-beta1"
 api_version = 10
 
 dst_compatible = false
