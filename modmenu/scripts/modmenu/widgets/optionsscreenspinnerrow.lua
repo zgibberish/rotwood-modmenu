@@ -1,3 +1,6 @@
+-- modified version of OptionsScreenSpinnerRow
+-- + removed data type restriction in OptionsScreenSpinnerRow:SetValues
+
 local ImageButton = require "widgets.imagebutton"
 local Text = require "widgets.text"
 local easing = require "util.easing"
@@ -124,10 +127,10 @@ function OptionsScreenSpinnerRow:OnFocusChange(hasFocus)
 end
 
 function OptionsScreenSpinnerRow:SetValues(values)
-	assert(type(values[1].data) ~= "boolean", "Use OptionsScreenToggleRow for bools.")
-	-- I don't think there's a hard requirement on type, but you probably want
-	-- an enum string since settings has support for them.
-	assert(type(values[1].data) == "string" or type(values[1].data) == "number", "Are you storing the right kind of data?")
+	-- assert(type(values[1].data) ~= "boolean", "Use OptionsScreenToggleRow for bools.")
+	-- -- I don't think there's a hard requirement on type, but you probably want
+	-- -- an enum string since settings has support for them.
+	-- assert(type(values[1].data) == "string" or type(values[1].data) == "number", "Are you storing the right kind of data?")
 
 	OptionsScreenSpinnerRow._base.SetValues(self, values)
 	if #self.values > 0 then
