@@ -14,6 +14,10 @@ local ModEntryToggleRow = Class(OptionsScreenToggleRow, function(self, width, ri
     self.modicon_container.icon = self.modicon_container:AddChild(Image())
         :SetHiddenBoundingBox(true) -- (!!!) disables this widget's bounding box?? (so big images dont push other stuff around)
         :SetMasked(not bypassModiconMask)
+
+	-- because the background has to be resized again sometimes to modicon messing with text wrapping
+	-- (see Layout() below)
+    self.bg:SetRegistration("left", "top")
 end)
 
 function ModEntryToggleRow:SetModIcon(tex)
@@ -35,6 +39,15 @@ function ModEntryToggleRow:Layout()
 		:LayoutBounds("left", "below", self.title)
 		:Offset(0, 2)
     self.textContainer:Offset(DEFAULT_LEFT_PADDING, 0)
+
+	-- calculate height again because all the text were squished in a bit
+	-- to make room for the mod icon
+	local textW, textH = self.textContainer:GetSize()
+	local rightW, rightH = self.rightContainer:GetSize()
+	self.height = math.max(textH, rightH) + self.paddingV * 2
+	self.bg:SetSize(self.width, self.height)
+	self.rightColumnHitbox:SetSize(self.rightColumnWidth, self.height)
+		:Offset(-self.paddingHRight, 0)
 
     return self
 end
