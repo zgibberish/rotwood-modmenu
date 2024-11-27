@@ -36,11 +36,11 @@ local function SortMods(modtable, sort_fn_index)
     -- mods shown are sorted by their fancy name (the name defined in modinfo),
     -- if there is no fancy name, the moddir name is used
 
-    -- using ModSortingComparators
-    if sort_fn_index == 1 then --FavoritesFirst
-        table.sort(modtable, ModSortingComparators[2]) --Alphabetical
-        table.sort(modtable, ModSortingComparators[1]) --FavoritesFirst
-    else
+    -- using 
+    -- everything is sorted alphabetically first before sorting with
+    -- any other comparators
+    table.sort(modtable, ModSortingComparators[2]) --Alphabetical
+    if sort_fn_index ~= 2 then -- anything other than Alphabetical
         table.sort(modtable, ModSortingComparators[sort_fn_index])
     end
 end
@@ -114,11 +114,11 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
         :SetText("Sort by", "Show mods in this order")
         :SetValues({ -- only number data works right (i tried)
             { name = "Favorites First",   data = 1 }, --FavoritesFirst
-            { name = "Name",              data = 1 }, --Alphabetical
-            { name = "Name Descending",   data = 2 }, --AlphabeticalReversed
-            { name = "Author",            data = 3 }, --Author
-            { name = "Author Descending", data = 4 }, --AuthorReversed
-            { name = "Enabled First",     data = 5 }, --EnabledFirst
+            { name = "Name",              data = 2 }, --Alphabetical
+            { name = "Name Descending",   data = 3 }, --AlphabeticalReversed
+            { name = "Author",            data = 4 }, --Author
+            { name = "Author Descending", data = 5 }, --AuthorReversed
+            { name = "Enabled First",     data = 6 }, --EnabledFirst
             { name = "Disabled First",    data = 7 }, --DisabledFirst
         })
         :_SetValue(SELECTED_SORTING_METHOD)
