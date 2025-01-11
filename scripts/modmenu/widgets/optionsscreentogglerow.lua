@@ -68,8 +68,6 @@ function OptionsScreenToggleRow:OnFocusChange(hasFocus)
 		self.toggleButton:TintTo(nil, self.titleUnselectedColor, 0.4, easing.outQuad)
 	end
 
-	self.toggleButton:OnFocusChange(hasFocus)
-
 	return self
 end
 
