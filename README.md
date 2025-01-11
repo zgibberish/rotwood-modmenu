@@ -7,5 +7,3 @@ Mod manager UI for Rotwood, adds a "Mods" page to the game's options screen to m
 ![](img/modmenu_1.png)
 ![](img/modmenu_2.png)
 ![](img/modmenu_3.png)
-![](img/modmenu_4.png)
-![](img/modmenu_5.png)

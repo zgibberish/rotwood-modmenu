@@ -2,7 +2,7 @@ local CheckBox = require "widgets.checkbox"
 local easing = require "util.easing"
 local kassert = require "util.kassert"
 
-local OptionsScreenBaseRow = require "widgets/optionsscreenbaserow"
+local OptionsScreenBaseRow = require "screens.options.optionsscreenbaserow"
 
 ------------------------------------------------------------------------------------------
 --- Displays a row with an on/off toggle option
@@ -67,8 +67,6 @@ function OptionsScreenToggleRow:OnFocusChange(hasFocus)
 	else
 		self.toggleButton:TintTo(nil, self.titleUnselectedColor, 0.4, easing.outQuad)
 	end
-
-	self.toggleButton:OnFocusChange(hasFocus)
 
 	return self
 end
