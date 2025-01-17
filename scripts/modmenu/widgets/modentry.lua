@@ -5,6 +5,8 @@ local ModEntryImageButton = require "modmenu.widgets.modentry_imagebutton"
 local ModEntryImageButtonToggle = require "modmenu.widgets.modentry_imagebutton_toggle"
 local ModConfiguratorScreen = require "modmenu.screens.modconfiguratorscreen"
 
+local MMPersistDataUtil = require "modmenu.util.mmpersistdatautil"
+
 -- always assume KnownModIndex is available at the time this widget is used
 -- (so no basic nil checks needed)
 -- some functions below are just wrappers to return exactly what KnownModIndex
@@ -19,7 +21,7 @@ end
 
 local function IsModFavorited(modname)
     -- always return a bool, never nil
-    return Profile:IsModFavorited(modname)
+    return MMPersistDataUtil.IsModFavorited(modname)
 end
 
 local function GetModFancyName(modname)
@@ -100,9 +102,8 @@ local ModEntry = Class(Widget, function(self, modname, rowWidth)
         :_SetValue(self.info.favorited and 1 or 2)
         :OnFocusChange(false) -- manually update the button's image color after setting its values manually
         :SetOnValueChangeFn(function(data)
-            Profile:SetModFavorited(modname, data)
-            Profile.dirty = true
-            Profile:Save()
+            MMPersistDataUtil.SetModFavorited(modname, data)
+            MMPersistDataUtil.Save()
             if self.onfavoriteupdated_fn then
                 self.onfavoriteupdated_fn()
             end

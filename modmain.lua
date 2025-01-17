@@ -17,6 +17,10 @@ local ModSortingComparators = require "modmenu.modsortingcomparators"
 local DEFAULT_SORTING_METHOD <const> = 1 --FavoritesFirst
 local SELECTED_SORTING_METHOD = DEFAULT_SORTING_METHOD
 
+-- set up modmenu persist data util
+local MMPersistDataUtil = require "modmenu.util.mmpersistdatautil"
+MMPersistDataUtil.Init()
+
 local function PrepareModIcon(modname)
     local info = KnownModIndex:GetModInfo(modname)
     if info ~= nil and info.iconpath ~= nil then

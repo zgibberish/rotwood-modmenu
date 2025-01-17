@@ -1,6 +1,8 @@
+local MMPersistDataUtil = require "modmenu.util.mmpersistdatautil"
+
 local function FavoritesFirst(a, b)
-    local favorited_a = Profile:IsModFavorited(a)
-    local favorited_b = Profile:IsModFavorited(b)
+    local favorited_a = MMPersistDataUtil.IsModFavorited(a)
+    local favorited_b = MMPersistDataUtil.IsModFavorited(b)
     return favorited_a and not favorited_b
 end
 
