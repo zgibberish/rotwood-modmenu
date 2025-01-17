@@ -51,8 +51,8 @@ end
 
 AddClassPostConstruct("screens.optionsscreen", function(self)
     if self.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil then
-        print("modmenu optionsscreen postconstruct failed?")
-        print("->    self.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil")
+        print("ERROR (ModMenu) optionsscreen postconstruct failed?")
+        print("\tself.nav_tabs == nil or self.tabs == nil or self.scrollContents == nil")
         return
     end
     
