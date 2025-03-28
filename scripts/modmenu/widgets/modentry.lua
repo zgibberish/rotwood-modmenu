@@ -75,9 +75,9 @@ local ModEntry = Class(Widget, function(self, modname, rowWidth)
         :_SetValue(self.info.enabled and 1 or 2)
         :SetOnValueChangeFn(function(data)
             if data then
-                KnownModIndex:Enable(modname)
+                KnownModIndex:EnableMod(modname)
             else
-                KnownModIndex:Disable(modname)
+                KnownModIndex:DisableMod(modname)
             end
         end)
         

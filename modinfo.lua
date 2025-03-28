@@ -1,22 +1,19 @@
-name = "Mod Menu"
-description = "GUI to view and manage installed mods, adds a \"Mods\" tab to the options screen."
-author = "gibberish"
-version = "2.0.1"
-api_version = 10
+return {
+    name = "Mod Menu",
+    description = "GUI to view and manage installed mods, adds a \"Mods\" tab to the options screen.",
+    author = "gibberish",
+    version = "3.0.0",
+    mod_version = "3.0.0",
+    api_version = 1,
+    mod_type = "gameplay",
+    supports_mode = { rotwood = true },
 
-dst_compatible = false
-forge_compatible = false
-gorge_compatible = false
-dont_starve_compatible = false
-reign_of_giants_compatible = false
-shipwrecked_compatible = false
-rotwood_compatible = true
+    client_only_mod = true,
+    all_clients_require_mod = false,
 
-client_only_mod = true
-all_clients_require_mod = false
-
-icon_atlas = "modicon.png"
-icon = "modicon.png"
+    icon_atlas = "modicon.png",
+    icon = "modicon.png",
+}
 
 --[[
 MODDERS PLEASE READ
