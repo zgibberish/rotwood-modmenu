@@ -14,6 +14,8 @@ local OptionsScreenCategoryTitle = require "modmenu.widgets.optionsscreencategor
 local OptionsScreenSpinnerRow = require "modmenu.widgets.optionsscreenspinnerrow"
 local ModSortingComparators = require "modmenu.modsortingcomparators"
 
+local lume = require "util.lume"
+
 local DEFAULT_SORTING_METHOD <const> = 1 --FavoritesFirst
 local SELECTED_SORTING_METHOD = DEFAULT_SORTING_METHOD
 
