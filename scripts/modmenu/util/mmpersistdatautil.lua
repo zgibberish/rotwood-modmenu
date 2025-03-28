@@ -12,15 +12,15 @@ local MMPersistDatUtil = {}
 function MMPersistDatUtil.Init()
     -- this is safe, TheSaveSystem is already initialized
     -- before all mods are loaded!
-    TheSaveSystem.gjb_modmenufavs = SaveData("gbj_modmenu_favs", "GBJModMenuFavs")
+    TheSaveSystem.gbj_modmenufavs = SaveData("gbj_modmenu_favs", "GBJModMenuFavs")
     MMPersistDatUtil.Load()
 end
 
 function MMPersistDatUtil.Load()
     local loader = MultiCallback()
-    TheSaveSystem.gjb_modmenufavs:Load(loader)
+    TheSaveSystem.gbj_modmenufavs:Load(loader)
     loader:WhenAllComplete(function(loader_success)
-        TheSaveSystem.gjb_modmenufavs.loader_success = loader_success
+        TheSaveSystem.gbj_modmenufavs.loader_success = loader_success
 
         if not loader_success then return end -- huh
 
@@ -29,14 +29,14 @@ function MMPersistDatUtil.Load()
         for i,name in ipairs(TheSim:GetModDirectoryNames()) do
             modnames[name] = true
         end
-        local saved_favs = TheSaveSystem.gjb_modmenufavs.persistdata
+        local saved_favs = TheSaveSystem.gbj_modmenufavs.persistdata
         
         -- this looks so messy i hate it
         for k,v in pairs(saved_favs) do
             if string.find(k, '^'..FAV_PREFIX) ~= nil then
                 local modname = string.sub(k, string.len(FAV_PREFIX)+1)
                 if modnames[modname] == nil then
-                    TheSaveSystem.gjb_modmenufavs:SetValue(k, nil)
+                    TheSaveSystem.gbj_modmenufavs:SetValue(k, nil)
                 end
             end
         end
@@ -46,11 +46,11 @@ end
 
 function MMPersistDatUtil.UsableSaveData()
     local res = true
-    if TheSaveSystem.gjb_modmenufavs == nil then res = false end
-    if not TheSaveSystem.gjb_modmenufavs.loader_success then res = false end
+    if TheSaveSystem.gbj_modmenufavs == nil then res = false end
+    if not TheSaveSystem.gbj_modmenufavs.loader_success then res = false end
     
     if not res then
-        print("WARNING (Mod Menu): gjb_modmenufavs corrupted or failed to load. Please submit an issue about this!")
+        print("WARNING (Mod Menu): gbj_modmenufavs corrupted or failed to load. Please submit an issue about this!")
     end
 
     return res
@@ -58,16 +58,16 @@ end
 
 function MMPersistDatUtil.Save()
     if not MMPersistDatUtil.UsableSaveData() then return end;
-    TheSaveSystem.gjb_modmenufavs:Save()
+    TheSaveSystem.gbj_modmenufavs:Save()
 end
 
 function MMPersistDatUtil.SetModFavorited(modname, favorited)
     if not MMPersistDatUtil.UsableSaveData() then return end;
-    TheSaveSystem.gjb_modmenufavs:SetValue(FAV_PREFIX..modname, favorited)
+    TheSaveSystem.gbj_modmenufavs:SetValue(FAV_PREFIX..modname, favorited)
 end
 function MMPersistDatUtil.IsModFavorited(modname)
     if not MMPersistDatUtil.UsableSaveData() then return end;
-    return TheSaveSystem.gjb_modmenufavs:GetValue(FAV_PREFIX..modname) or false
+    return TheSaveSystem.gbj_modmenufavs:GetValue(FAV_PREFIX..modname) or false
 end
 
 return MMPersistDatUtil
