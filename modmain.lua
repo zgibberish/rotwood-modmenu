@@ -74,7 +74,8 @@ AddClassPostConstruct("screens.optionsscreen", function(self)
 
         -- CLIENT MODS
         self.pages.mods.mod_entries:AddChild(OptionsScreenCategoryTitle(self.rowWidth, "Client Mods"))
-        local list_client = KnownModIndex:GetClientModNames()
+        local client_modnames_table = KnownModIndex:GetClientModNamesTable()
+        local list_client = lume.map(client_modnames_table, function(a) return a.modname end)
         SortMods(list_client, SELECTED_SORTING_METHOD)
         for _, modname in ipairs(list_client) do
             PrepareModIcon(modname)
